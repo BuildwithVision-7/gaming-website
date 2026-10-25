@@ -1,0 +1,30 @@
+name: Deploy Gaming Website
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, Linux, X64]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t gaming-website:${GITHUB_SHA} .
+
+      - name: Load image into Kind
+        run: kind load docker-image gaming-website:${GITHUB_SHA} --name mycluster
+
+      - name: Update Kubernetes deployment
+        run: |
+          kubectl set image deployment/gaming-website \
+            gaming-website=gaming-website:${GITHUB_SHA} \
+            -n default
+
+      - name: Wait for deployment
+        run: kubectl rollout status deployment/gaming-website -n default --timeout=120s
