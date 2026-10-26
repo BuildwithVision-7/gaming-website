@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaming-website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gaming-website
+  template:
+    metadata:
+      labels:
+        app: gaming-website
+    spec:
+      containers:
+        - name: gaming-website
+          image: gaming-website:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
