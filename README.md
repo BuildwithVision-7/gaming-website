@@ -43,3 +43,5 @@ git clone https://github.com/mscbuild/gaming-website.git
 ### License
 
 This project is **free to use** and does not contains any license.
+
+Last redeploy test: 30 Oct 2026
